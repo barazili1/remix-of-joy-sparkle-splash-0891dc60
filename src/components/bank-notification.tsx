@@ -48,9 +48,8 @@ export function BankNotification() {
               <span>الآن</span>
             </div>
             <p>
-              تم تنفيذ تحويل لحظي من بطاقتكم مسبقة الدفع بمبلغ{" "}
-              <span dir="ltr">{payload.amount}</span> جم إلى ايمان ا*** م*** س***
-              رقم...
+              تم تنفيذ تحويل لحظي بمبلغ <span dir="ltr">{payload.amount}</span>{" "}
+              جم إلى ايمان ا*** م*** س***
             </p>
           </div>
         </div>
