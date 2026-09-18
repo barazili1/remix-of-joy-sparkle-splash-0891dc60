@@ -14,8 +14,11 @@ const items = [
 ];
 
 export function AppBottomNav() {
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const visible = pathname === "/home" || pathname === "/transfersimulator";
+  const { pathname, isLoading } = useRouterState({
+    select: (state) => ({ pathname: state.location.pathname, isLoading: state.isLoading }),
+  });
+  const visible =
+    !isLoading && (pathname === "/home" || pathname === "/transfersimulator");
 
   return (
     <nav
