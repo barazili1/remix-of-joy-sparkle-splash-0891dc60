@@ -4,6 +4,7 @@ import backgroundAsset from "@/assets/instapay-background.jpeg";
 import instapayLogo from "@/assets/instapay-logo.png";
 import ipnLogo from "@/assets/ipn-logo.png";
 import { ProgressMark } from "@/components/progress-mark";
+import { preloadAllAssets } from "@/lib/preload-assets";
 
 export const Route = createFileRoute("/")({
   head: () => ({
