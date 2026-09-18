@@ -2216,3 +2216,70 @@
 }
 
 
+
+/* ===== Bank SMS notification (app-level) ===== */
+.bank-notification {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: min(100%, 430px);
+  padding: 10px 10px 0;
+  z-index: 90;
+  pointer-events: none;
+  transform: translate(-50%, -120%);
+  opacity: 0;
+  transition: transform 420ms cubic-bezier(0.22, 1.1, 0.36, 1), opacity 300ms ease;
+}
+.bank-notification.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+.bank-notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 11px 12px 13px;
+  border-radius: 22px;
+  background: oklch(0.22 0.01 260 / 0.78);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 12px 34px oklch(0 0 0 / 0.32);
+  color: oklch(0.98 0 0);
+}
+.bank-notification-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, oklch(0.68 0.14 255), oklch(0.58 0.16 260));
+  color: oklch(1 0 0);
+}
+.bank-notification-avatar svg { width: 24px; height: 24px; }
+.bank-notification-badge {
+  position: absolute;
+  bottom: -3px;
+  inset-inline-start: -3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid oklch(0.98 0 0);
+  background: oklch(0.72 0.19 145);
+}
+.bank-notification-body { flex: 1; min-width: 0; }
+.bank-notification-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.bank-notification-head strong { font-size: 15px; font-weight: 700; }
+.bank-notification-head span { font-size: 13px; opacity: 0.75; }
+.bank-notification-body p {
+  margin-top: 2px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  font-weight: 600;
+}
