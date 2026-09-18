@@ -24,13 +24,25 @@ function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let cancelled = false;
     const showProgress = window.setTimeout(() => setPhase("progress"), 1000);
-    const goHome = window.setTimeout(() => {
-      navigate({ to: "/home" });
-    }, 3000);
+
+    const minWait = new Promise<void>((resolve) =>
+      window.setTimeout(resolve, 3000),
+    );
+    const maxWait = new Promise<void>((resolve) =>
+      window.setTimeout(resolve, 9000),
+    );
+
+    Promise.all([minWait, Promise.race([preloadAllAssets(), maxWait])]).then(
+      () => {
+        if (!cancelled) navigate({ to: "/home" });
+      },
+    );
+
     return () => {
+      cancelled = true;
       window.clearTimeout(showProgress);
-      window.clearTimeout(goHome);
     };
   }, [navigate]);
 
