@@ -1,9 +1,5 @@
 # Roadmap
 
-- [x] Home → transfer: move right, 100ms (vt-right)
-- [x] Transfer → home: move left, 100ms (vt-left)
-- [x] Success → home: move left, 150ms (vt-back)
-- [x] Success page IPN image: 120px wide (verified 120px in preview)
-- [x] PIN page (vt-up) transition: 150ms
-- [x] Splash → home: no slide (unchanged)
-- [x] Verified all transitions via Playwright
+- [x] Notification shows once per success-page visit, 3s after entering, stays 5s app-wide
+- [x] Verify notification timing (appears ~3s after entering, dismisses after 5s, re-arms on next visit)
+- [x] Preload + cache all pages' images/icons so page-to-page navigation is instant (0 new image requests on navigation)

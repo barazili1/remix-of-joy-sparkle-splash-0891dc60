@@ -1,24 +1,7 @@
 type BankNotificationPayload = { amount: string };
 
 const PENDING_KEY = "bank-notification-pending";
-const DONE_KEY = "bank-notification-done";
 const AUTO_DISMISS_MS = 5000;
-
-function isDone() {
-  try {
-    return window.sessionStorage.getItem(DONE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function markDone() {
-  try {
-    window.sessionStorage.setItem(DONE_KEY, "1");
-  } catch {
-    /* storage unavailable */
-  }
-}
 
 let payload: BankNotificationPayload | null = null;
 let scheduledTimer: number | undefined;
@@ -30,7 +13,7 @@ function notify() {
 }
 
 export function scheduleBankNotification(next: BankNotificationPayload, delayMs: number) {
-  if (isDone() || payload !== null) return;
+  if (payload !== null) return;
   if (scheduledTimer !== undefined) return;
   const fireAt = Date.now() + delayMs;
   try {
@@ -47,7 +30,6 @@ export function scheduleBankNotification(next: BankNotificationPayload, delayMs:
 export function restorePendingBankNotification() {
   if (restored || payload !== null || scheduledTimer !== undefined) return;
   restored = true;
-  if (isDone()) return;
   try {
     const raw = window.sessionStorage.getItem(PENDING_KEY);
     if (!raw) return;
@@ -73,7 +55,6 @@ export function restorePendingBankNotification() {
 
 export function showBankNotification(next: BankNotificationPayload) {
   payload = next;
-  markDone();
   try {
     window.sessionStorage.removeItem(PENDING_KEY);
   } catch {
