@@ -13,63 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppBottomNav } from "../components/app-bottom-nav";
 import { BankNotification } from "../components/bank-notification";
-import homeHeader from "../assets/home-header.jpeg";
-import homeHeaderClean from "../assets/home-header-clean.png";
-import qrCode from "../assets/qr-code.png";
-import btnQr from "../assets/btn-qr.png";
-import btnShare from "../assets/btn-share.png";
-import ipnLogo from "../assets/ipn-logo.png";
-import actionBalance from "../assets/action-balance.png";
-import actionLink from "../assets/action-link.png";
-import actionQr from "../assets/action-qr.png";
-import serviceBills from "../assets/service-bills.png";
-import serviceRequest from "../assets/service-request.png";
-import serviceSend from "../assets/service-send.png";
-import serviceHistory from "../assets/service-history.png";
-import serviceAccounts from "../assets/service-accounts.png";
-import serviceDonations from "../assets/service-donations.png";
-import tsHero from "../assets/ts-hero-bg.jpeg";
-import iconPhone from "../assets/phone.png";
-import iconAt from "../assets/at.png";
-import iconBank from "../assets/bank.png";
-import iconCard from "../assets/card.png";
-import iconWallet from "../assets/wallet.png";
-import iconPerson from "../assets/person.png";
-import iconClipboard from "../assets/clipboard.png";
-import bankLogo from "../assets/nbe-logo.png";
-import confirmWallet from "../assets/wallet.png";
-import successCheck from "../assets/success-check.jpeg";
-import instapayBackground from "../assets/instapay-background.jpeg";
-
-const pageImages = [
-  homeHeader,
-  homeHeaderClean,
-  qrCode,
-  btnQr,
-  btnShare,
-  ipnLogo,
-  actionBalance,
-  actionLink,
-  actionQr,
-  serviceBills,
-  serviceRequest,
-  serviceSend,
-  serviceHistory,
-  serviceAccounts,
-  serviceDonations,
-  tsHero,
-  iconPhone,
-  iconAt,
-  iconBank,
-  iconCard,
-  iconWallet,
-  iconPerson,
-  iconClipboard,
-  bankLogo,
-  confirmWallet,
-  successCheck,
-  instapayBackground,
-];
+import { preloadAllAssets } from "../lib/preload-assets";
 
 function NotFoundComponent() {
   return (
@@ -155,7 +99,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&family=Rajdhani:wght@600;700&display=swap",
       },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
-      ...pageImages.map((href) => ({ rel: "preload", href, as: "image" })),
     ],
   }),
   shellComponent: RootShell,
@@ -180,6 +123,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  // Warm the browser cache with every image/icon in the app, no matter which
+  // page the session starts on, so page-to-page navigation renders instantly.
+  useEffect(() => {
+    void preloadAllAssets();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
