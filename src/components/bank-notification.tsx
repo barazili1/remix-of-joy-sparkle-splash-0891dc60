@@ -37,7 +37,10 @@ export function BankNotification() {
       {payload && (
         <div className="bank-notification-card">
           <div className="bank-notification-avatar">
-            <User strokeWidth={2.2} />
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M12 13.4c-4.1 0-7.4 2.5-7.4 5.6 0 .6.5 1 1.1 1h12.6c.6 0 1.1-.4 1.1-1 0-3.1-3.3-5.6-7.4-5.6Z" />
+            </svg>
             <span className="bank-notification-badge" aria-hidden="true" />
           </div>
           <div className="bank-notification-body">
@@ -47,8 +50,8 @@ export function BankNotification() {
             </div>
             <p>
               تم تنفيذ تحويل لحظي من بطاقتكم مسبقة الدفع بمبلغ{" "}
-              <span dir="ltr">{payload.amount}</span> جنيه إلى ايمان ا*** م***
-              س*** رقم...
+              <span dir="ltr">{payload.amount}</span> جم إلى ايمان ا*** م*** س***
+              رقم...
             </p>
           </div>
         </div>
