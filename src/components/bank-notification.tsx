@@ -3,6 +3,7 @@ import { User } from "lucide-react";
 import {
   dismissBankNotification,
   getBankNotification,
+  restorePendingBankNotification,
   subscribeBankNotification,
 } from "@/lib/bank-notification";
 
@@ -13,7 +14,10 @@ export function BankNotification() {
   const payload = getBankNotification();
   const visible = payload !== null;
 
-  useEffect(() => subscribeBankNotification(() => force((n) => n + 1)), []);
+  useEffect(() => {
+    restorePendingBankNotification();
+    return subscribeBankNotification(() => force((n) => n + 1));
+  }, []);
 
   useEffect(() => {
     if (!payload) return;
