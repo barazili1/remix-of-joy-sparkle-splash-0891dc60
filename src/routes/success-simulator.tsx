@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, ChevronDown, ChevronRight, Share2, Star, Wallet } from "lucide-react";
-import { showBankNotification } from "@/lib/bank-notification";
+import { scheduleBankNotification } from "@/lib/bank-notification";
 import bankLogo from "@/assets/nbe-logo.png";
 import ipnLogo from "@/assets/ipn-logo-colored.png";
 import successCheck from "@/assets/success-check.jpeg";
@@ -50,12 +50,12 @@ function SuccessSimulatorPage() {
   const [transactionDate] = useState(() => formatTransactionDate(new Date()));
 
   useEffect(() => {
-    const t = window.setTimeout(() => {
-      showBankNotification({
+    scheduleBankNotification(
+      {
         amount: amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-      });
-    }, 3000);
-    return () => window.clearTimeout(t);
+      },
+      3000,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
