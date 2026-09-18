@@ -16,6 +16,8 @@ export const assetUrls: string[] = [
     .filter((u): u is string => typeof u === "string"),
 ];
 
+let preloadPromise: Promise<void> | undefined;
+
 function loadOne(url: string): Promise<void> {
   return new Promise((resolve) => {
     const img = new Image();
@@ -30,10 +32,11 @@ function loadOne(url: string): Promise<void> {
 export function preloadAllAssets(
   onProgress?: (done: number, total: number) => void,
 ): Promise<void> {
+  if (preloadPromise) return preloadPromise;
   const total = assetUrls.length;
   let done = 0;
   onProgress?.(0, total);
-  return Promise.all(
+  preloadPromise = Promise.all(
     assetUrls.map((url) =>
       loadOne(url).then(() => {
         done += 1;
@@ -41,4 +44,5 @@ export function preloadAllAssets(
       }),
     ),
   ).then(() => undefined);
+  return preloadPromise;
 }

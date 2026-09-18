@@ -2235,6 +2235,8 @@
 .bank-notification.visible {
   opacity: 1;
   transform: translate(-50%, 0) scale(1);
+}
+.bank-notification.visible.entering {
   animation: bank-notification-drop 620ms cubic-bezier(0.18, 1.35, 0.35, 1) both;
 }
 @keyframes bank-notification-drop {

@@ -1,32 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import {
-  dismissBankNotification,
   getBankNotification,
   restorePendingBankNotification,
   subscribeBankNotification,
 } from "@/lib/bank-notification";
 
-const AUTO_DISMISS_MS = 5000;
-
 export function BankNotification() {
-  const [, force] = useState(0);
-  const payload = getBankNotification();
-  const visible = payload !== null;
+  const notification = useSyncExternalStore(
+    subscribeBankNotification,
+    getBankNotification,
+    () => null,
+  );
+  const payload = notification?.payload;
+  const visible = notification !== null;
+  const entering = notification !== null && Date.now() - notification.shownAt < 900;
 
   useEffect(() => {
     restorePendingBankNotification();
-    return subscribeBankNotification(() => force((n) => n + 1));
   }, []);
-
-  useEffect(() => {
-    if (!payload) return;
-    const t = window.setTimeout(dismissBankNotification, AUTO_DISMISS_MS);
-    return () => window.clearTimeout(t);
-  }, [payload]);
 
   return (
     <div
-      className={`bank-notification${visible ? " visible" : ""}`}
+      className={`bank-notification${visible ? " visible" : ""}${entering ? " entering" : ""}`}
       role="status"
       aria-live="polite"
       dir="rtl"
