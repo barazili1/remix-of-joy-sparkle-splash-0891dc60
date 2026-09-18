@@ -1,3 +1,5 @@
+import notificationSound from "@/assets/iphone-notification.m4a.asset.json";
+
 type BankNotificationPayload = { amount: string };
 
 type StoredNotification =
@@ -17,10 +19,31 @@ let notification: VisibleNotification | null = null;
 let scheduledTimer: number | undefined;
 let dismissTimer: number | undefined;
 let restored = false;
+let audio: HTMLAudioElement | undefined;
 const listeners = new Set<() => void>();
 
 function notify() {
   listeners.forEach((listener) => listener());
+}
+
+function getAudio() {
+  if (typeof window === "undefined") return undefined;
+  audio ??= new Audio(notificationSound.url);
+  audio.preload = "auto";
+  return audio;
+}
+
+export function prepareBankNotificationSound() {
+  getAudio()?.load();
+}
+
+function playBankNotificationSound() {
+  const sound = getAudio();
+  if (!sound) return;
+  sound.currentTime = 0;
+  void sound.play().catch(() => {
+    /* Browsers can silence delayed audio when the device disallows it. */
+  });
 }
 
 export function scheduleBankNotification(next: BankNotificationPayload, delayMs: number) {
@@ -34,7 +57,7 @@ export function scheduleBankNotification(next: BankNotificationPayload, delayMs:
   }
   scheduledTimer = window.setTimeout(() => {
     scheduledTimer = undefined;
-    showBankNotification(next);
+    showBankNotification(next, undefined, undefined, true);
   }, delayMs);
 }
 
@@ -74,6 +97,7 @@ export function showBankNotification(
   next: BankNotificationPayload,
   shownAt = Date.now(),
   expiresAt = shownAt + AUTO_DISMISS_MS,
+  playSound = false,
 ) {
   if (notification !== null) return;
   notification = { payload: next, shownAt, expiresAt };
@@ -85,6 +109,7 @@ export function showBankNotification(
   }
   if (dismissTimer !== undefined) window.clearTimeout(dismissTimer);
   dismissTimer = window.setTimeout(dismissBankNotification, Math.max(0, expiresAt - Date.now()));
+  if (playSound) playBankNotificationSound();
   notify();
 }
 
