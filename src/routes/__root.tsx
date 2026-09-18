@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppBottomNav } from "../components/app-bottom-nav";
+import { BankNotification } from "../components/bank-notification";
 import homeHeader from "../assets/home-header.jpeg";
 import homeHeaderClean from "../assets/home-header-clean.png";
 import qrCode from "../assets/qr-code.png";
@@ -185,6 +186,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <AppBottomNav />
+      <BankNotification />
     </QueryClientProvider>
   );
 }

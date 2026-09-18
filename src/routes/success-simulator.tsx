@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, ChevronDown, ChevronRight, Share2, Star, Wallet } from "lucide-react";
+import { showBankNotification } from "@/lib/bank-notification";
 import bankLogo from "@/assets/nbe-logo.png";
 import ipnLogo from "@/assets/ipn-logo-colored.png";
 import successCheck from "@/assets/success-check.jpeg";
@@ -47,6 +48,17 @@ function SuccessSimulatorPage() {
   const [showDetails, setShowDetails] = useState(false);
   const [reference] = useState(() => Array.from({ length: 12 }, () => Math.floor(Math.random() * 10)).join(""));
   const [transactionDate] = useState(() => formatTransactionDate(new Date()));
+
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      showBankNotification({
+        amount: amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      });
+    }, 3000);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   return (
     <main className="success-simulator" dir="rtl" lang="ar">
