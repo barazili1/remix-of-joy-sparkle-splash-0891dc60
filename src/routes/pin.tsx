@@ -3,6 +3,10 @@ import { useState } from "react";
 import { ChevronRight, ChevronDown, Eye } from "lucide-react";
 import { ProgressMark } from "@/components/progress-mark";
 import { recordTransfer } from "@/lib/wallet";
+import {
+  prepareBankNotificationSound,
+  scheduleBankNotification,
+} from "@/lib/bank-notification";
 import ipnLogo from "@/assets/ipn-color.png";
 
 type PinSearch = {
@@ -62,6 +66,7 @@ function PinPage() {
     if (key === "ENTER") {
       if (pin === "200200") {
         setIsLoading(true);
+        prepareBankNotificationSound();
         if (isTransfer) {
           const numericAmount = Number(amount.replaceAll(",", "")) || 0;
           recordTransfer({
@@ -76,6 +81,16 @@ function PinPage() {
         }
         await new Promise((resolve) => window.setTimeout(resolve, 2500));
         if (isTransfer) {
+          const numericAmount = Number(amount.replaceAll(",", "")) || 2000;
+          scheduleBankNotification(
+            {
+              amount: numericAmount.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }),
+            },
+            3000,
+          );
           navigate({ to: "/success-simulator", search: { amount, phone } });
         } else {
           sessionStorage.setItem("pendingBalance", "1");
